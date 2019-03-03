@@ -76,30 +76,6 @@ class LeftBar extends React.Component {
                 <span className='nav-text'>Créer une UE</span>
               </Link>
             </Menu.Item>
-            <Menu.Item key='user/attestation'>
-              <Link to={'/dashboard/user/attestation'}>
-                <Icon type='form' />
-                <span className='nav-text'>Attestation sur l'honneur</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key='user/list'>
-              <Link to={'/dashboard/user/list'}>
-                <Icon type='bars' />
-                <span className='nav-text'>Liste des inscrits</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key='user/bedrooms'>
-              <Link to={'/dashboard/user/bedrooms'}>
-                <Icon type='home' />
-                <span className='nav-text'>Chambres</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key='user/teams'>
-              <Link to={'/dashboard/user/teams'}>
-                <Icon type='team' />
-                <span className='nav-text'>Équipe</span>
-              </Link>
-            </Menu.Item>
           </SubMenu>
         </Menu>
       </Sider>

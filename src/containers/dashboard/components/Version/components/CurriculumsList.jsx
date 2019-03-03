@@ -1,9 +1,9 @@
 import React from 'react'
 import { Table, Icon, Tooltip } from 'antd'
 
-class AttributesList extends React.Component {
+class CurriculumsList extends React.Component {
   render() {
-    const { attributes } = this.props
+    const { curriculums } = this.props
     const columns = [
       {
         title: 'Nom',
@@ -11,17 +11,12 @@ class AttributesList extends React.Component {
         key: 'name'
       },
       {
-        title: 'Valeur',
-        dataIndex: 'value',
-        key: 'value'
-      },
-      {
         title: 'Actions',
         dataIndex: 'id',
         render: id => (
-          <Tooltip placement='top' title="Supprimer l'attribut">
+          <Tooltip placement='top' title="Supprimer le cursus">
             <a
-              onClick={() => this.props.removeAttribute(id)}
+              onClick={() => this.props.removeCurriculums(id)}
               style={{ fontSize: '18px' }}
             >
               <Icon type='delete' />
@@ -30,17 +25,17 @@ class AttributesList extends React.Component {
         )
       }
     ]
-    const data = attributes.map(a => {
+    const data = curriculums.map(a => {
       return { ...a, key: a.id }
     })
     return (
       <Table
         dataSource={data}
         columns={columns}
-        locale={{ emptyText: 'Aucun attributs' }}
+        locale={{ emptyText: 'Aucun curus' }}
       />
     )
   }
 }
 
-export default AttributesList
+export default CurriculumsList

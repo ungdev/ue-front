@@ -1,16 +1,20 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import { reducer as notificationsReducer } from 'redux-notifications'
-import ues from './ues'
-import versions from './versions'
+import attributes from './attributes'
+import curriculums from './curriculums'
 import login from './login'
+import ues from './ues'
 import user from './user'
+import versions from './versions'
 
 export default combineReducers({
   routing: routerReducer,
   notifs: notificationsReducer,
-  ues,
-  versions,
+  attributes,
+  curriculums,
   login,
-  user
+  ues,
+  user,
+  versions
 })
