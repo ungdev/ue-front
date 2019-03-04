@@ -2,31 +2,30 @@ import React from 'react'
 import { Form, Input, Tooltip, Icon, Button, Spin, InputNumber } from 'antd'
 
 import { connect } from 'react-redux'
-import { fetchLastUEVersion, createVersion } from '../../../../modules/versions'
+import { createUE } from '../../../../modules/ues'
 import { fetchAttributes } from '../../../../modules/attributes'
 import { fetchCurriculums } from '../../../../modules/curriculums'
 import { fetchPeriods } from '../../../../modules/periods'
 import { fetchUEs } from '../../../../modules/ues'
 
-import AttributesList from './components/AttributesList'
-import AttributesModal from './components/AttributesModal'
-import CurriculumsList from './components/CurriculumsList'
-import PeriodsList from './components/PeriodsList'
-import RequiredsList from './components/RequiredsList'
-import RequiredsModal from './components/RequiredsModal'
+import AttributesList from '../Version/components/AttributesList'
+import AttributesModal from '../Version/components/AttributesModal'
+import CurriculumsList from '../Version/components/CurriculumsList'
+import PeriodsList from '../Version/components/PeriodsList'
+import RequiredsList from '../Version/components/RequiredsList'
+import RequiredsModal from '../Version/components/RequiredsModal'
 
 class Create extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      attributes: null,
-      curriculums: null,
-      periods: null,
-      requireds: null,
+      attributes: [],
+      curriculums: [],
+      periods: [],
+      requireds: [],
       attributesModal: false,
       requiredsModal: false
     }
-    props.fetchLastUEVersion(props.ueId)
     props.fetchUEs()
     props.fetchAttributes()
     props.fetchCurriculums()
@@ -37,7 +36,7 @@ class Create extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const { attributes, curriculums, requireds, periods } = this.state
-        const version = {
+        const ue = {
           ...values,
           attributes: attributes.map(item => {
             return { id: item.id, value: item.value }
@@ -48,8 +47,7 @@ class Create extends React.Component {
           }),
           periods: periods.map(item => item.id)
         }
-        this.props.createVersion(this.props.ueId, version)
-        this.props.closeDrawer()
+        this.props.createUE(ue)
       }
     })
   }
@@ -113,44 +111,7 @@ class Create extends React.Component {
     this.setState({ requiredsModal: false, requireds })
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { versions, ueId } = nextProps
-    let version = versions.find(v => v.ueId === ueId)
-    if (version) {
-      if (
-        (version.attributes.length > 0 ||
-          version.curriculums.length > 0 ||
-          version.requireds.length > 0 ||
-          version.periods.length > 0) &&
-        (!prevState.attributes ||
-          !prevState.curriculums ||
-          !prevState.periods ||
-          !prevState.requireds)
-      ) {
-        return {
-          attributes: version.attributes.map(attribute => {
-            return {
-              id: attribute.id,
-              name: attribute.name,
-              value: attribute.attribute_version.value
-            }
-          }),
-          curriculums: version.curriculums,
-          periods: version.periods,
-          requireds: version.requireds
-        }
-      }
-    }
-    return null
-  }
-
   render() {
-    const { versions, ueId, ues } = this.props
-    let version = versions.find(v => v.ueId === ueId)
-    let ue = ues.find(u => u.id === ueId)
-    if (!version || !ue) {
-      return <Spin />
-    }
     const { attributes, curriculums, periods, requireds } = this.state
     const { getFieldDecorator } = this.props.form
 
@@ -180,6 +141,26 @@ class Create extends React.Component {
     return (
       <React.Fragment>
         <Form onSubmit={this.handleSubmit}>
+          <Form.Item {...formItemLayout} label='Nom'>
+            {getFieldDecorator('name', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Vous devez entrer un nom !'
+                }
+              ]
+            })(<Input placeholder='MATH01' />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='Code'>
+            {getFieldDecorator('code', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Vous devez entrer un code !'
+                }
+              ]
+            })(<Input placeholder='MTX1' />)}
+          </Form.Item>
           <Form.Item {...formItemLayout} label='Titre'>
             {getFieldDecorator('title', {
               rules: [
@@ -187,9 +168,10 @@ class Create extends React.Component {
                   required: true,
                   message: 'Vous devez entrer un titre !'
                 }
-              ],
-              initialValue: version.title
-            })(<Input />)}
+              ]
+            })(
+              <Input placeholder='Analyse : suites et fonctions d’une variable réelle' />
+            )}
           </Form.Item>
           <Form.Item
             {...formItemLayout}
@@ -208,9 +190,13 @@ class Create extends React.Component {
                   required: true,
                   message: 'Vous devez entrer des objectifs !'
                 }
-              ],
-              initialValue: version.goals
-            })(<Input.TextArea />)}
+              ]
+            })(
+              <Input.TextArea
+                placeholder='La formation d’ingénieur nécessite la maîtrise de connaissances mathématiques fondamentales qui doivent
+            s’articuler au sein d’un raisonnement scientifique structuré.'
+              />
+            )}
           </Form.Item>
           <Form.Item
             {...formItemLayout}
@@ -229,9 +215,18 @@ class Create extends React.Component {
                   required: true,
                   message: 'Vous devez entrer un programme !'
                 }
-              ],
-              initialValue: version.programme
-            })(<Input.TextArea />)}
+              ]
+            })(
+              <Input.TextArea
+                placeholder='
+                ∙ assimiler des éléments de logique et s’approprier les modes de raisonnements principaux
+            ∙ mettre en évidence la structure des nombres réels et complexes
+            ∙ approfondir l’étude des suites numériques
+            ∙ consolider et développer des méthodes d’étude de fonctions numériques (développements limités)
+            ∙ consolider et développer les connaissances liées à l’intégration
+            ∙ savoir intégrer des équations différentielles linéaires du premier et du deuxième ordre dans des cas simples'
+              />
+            )}
           </Form.Item>
           <Form.Item {...formItemLayout} label='Nombre de crédits ECTS'>
             {getFieldDecorator('ECTS', {
@@ -240,9 +235,8 @@ class Create extends React.Component {
                   required: true,
                   message: 'Vous devez entrer le nombre de crédits !'
                 }
-              ],
-              initialValue: version.ECTS
-            })(<InputNumber min={1} />)}
+              ]
+            })(<InputNumber min={1} placeholder='6' />)}
           </Form.Item>
           <h2 style={{ textAlign: 'center' }}>
             <span>
@@ -325,17 +319,16 @@ class Create extends React.Component {
           visible={this.state.requiredsModal}
           onCancel={() => this.setState({ requiredsModal: false })}
           returnValue={this.addRequired}
-          ues={this.props.ues.filter(u => u.id !== ueId)}
+          ues={this.props.ues}
           versionRequireds={this.state.requireds}
         />
       </React.Fragment>
     )
   }
 }
-const WrappedEdit = Form.create({ name: 'create-versions' })(Create)
+const Wrapped = Form.create({ name: 'create-ue' })(Create)
 
 const mapStateToProps = state => ({
-  versions: state.versions.versions,
   ues: state.ues.ues,
   attributes: state.attributes.attributes,
   curriculums: state.curriculums.curriculums,
@@ -344,14 +337,13 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchUEs: () => dispatch(fetchUEs()),
-  fetchLastUEVersion: id => dispatch(fetchLastUEVersion(id)),
   fetchAttributes: () => dispatch(fetchAttributes()),
   fetchCurriculums: () => dispatch(fetchCurriculums()),
   fetchPeriods: () => dispatch(fetchPeriods()),
-  createVersion: (id, version) => dispatch(createVersion(id, version))
+  createUE: ue => dispatch(createUE(ue))
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(WrappedEdit)
+)(Wrapped)

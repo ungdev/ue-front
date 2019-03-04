@@ -47,3 +47,19 @@ export const fetchLastUEVersion = id => {
     }
   }
 }
+export const createVersion = (id, version) => {
+  return async dispatch => {
+    try {
+      const res = await axios.post(`/ues/${id}/versions`, version)
+      if (res.status === 200) dispatch(fetchLastUEVersion(id))
+    } catch (err) {
+      dispatch(
+        notifActions.notifSend({
+          message: errorToString(err.response.data.error),
+          kind: 'danger',
+          dismissAfter: 2000
+        })
+      )
+    }
+  }
+}

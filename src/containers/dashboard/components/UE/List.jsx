@@ -12,7 +12,6 @@ class List extends React.Component {
   render() {
     const { ues } = this.props
     if (!ues) return <Spin />
-    console.log(ues)
 
     const columns = [
       {

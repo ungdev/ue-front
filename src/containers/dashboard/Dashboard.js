@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import DashboardHome from './components/Accueil'
 import DashboardLoading from './components/Loading'
 import ListUEs from './components/UE/List'
+import CreateUE from './components/UE/Create'
 import UEDetails from './components/UE/components/UEDetails'
 import DashboardLayout from './layout'
 import { autoLogin } from '../../modules/login'
@@ -38,6 +39,9 @@ class Dashboard extends React.Component {
 
         {this.state.render && (
           <Route path={baseUrl + 'ues'} exact component={ListUEs} />
+        )}
+        {this.state.render && (
+          <Route path={baseUrl + 'ues/create'} exact component={CreateUE} />
         )}
         {this.state.render && (
           <Route path={baseUrl + 'ues/:id'} exact component={UEDetails} />

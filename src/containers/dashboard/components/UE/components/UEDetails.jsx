@@ -116,7 +116,10 @@ class UEListActions extends React.Component {
             paddingBottom: '108px'
           }}
         >
-          <VersionCreate ueId={ue.id} />
+          <VersionCreate
+            ueId={ue.id}
+            closeDrawer={() => this.setState({ createDrawer: false })}
+          />
         </Drawer>
       </React.Fragment>
     )
