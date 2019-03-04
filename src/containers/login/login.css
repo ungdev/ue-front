@@ -1,0 +1,15 @@
+.main{
+  background-image: url('../../assets//utt.jpg');
+  height: 100%;
+  background-position: center center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 20px
+}

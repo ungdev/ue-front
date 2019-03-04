@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Layout, Menu, Icon } from 'antd'
-import utt from './assets/utt.jpg'
+import utt from '../../../assets/uttlogo.jpg'
 import { logout } from '../../../modules/login'
 const { Header } = Layout
 

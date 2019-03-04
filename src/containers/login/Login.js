@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'antd'
 import { contactEtuutt, getToken } from '../../modules/login'
-
+import './login.css'
+import utt from '../../assets/uttlogo.jpg'
 class Login extends React.Component {
   constructor(props) {
     super(props)
@@ -13,9 +14,7 @@ class Login extends React.Component {
   }
 
   componentWillMount() {
-    console.log('mount', this.props.location)
     if (this.props.location === '/etuutt/redirect') {
-      console.log('gettoken')
       this.props.getToken(
         this.props.history.location.search.split('&code')[0].split('=')[1]
       )
@@ -30,9 +29,12 @@ class Login extends React.Component {
   contactEtuutt = () => this.props.contactEtuutt()
   render() {
     return (
-      <Button type='primary' onClick={this.contactEtuutt}>
-        Se connecter
-      </Button>
+      <div className='main'>
+        <img className='logo' src={utt} alt='' />
+        <Button type='primary' size='large' onClick={this.contactEtuutt}>
+          Se connecter
+        </Button>
+      </div>
     )
   }
 }
