@@ -6,12 +6,11 @@ class CurriculumsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      curriculums: props.curriculums,
       curriculumsModal: false
     }
   }
   render() {
-    const { curriculums } = this.state
+    const { curriculums } = this.props
     return (
       <div style={{ marginBottom: '20px' }}>
         {curriculums.map(curriculum => (
@@ -34,9 +33,12 @@ class CurriculumsList extends React.Component {
         <CurriculumsModal
           visible={this.state.curriculumsModal}
           onCancel={() => this.setState({ curriculumsModal: false })}
-          returnValue={this.props.addCurriculums}
+          returnValue={values => {
+            this.props.addCurriculum(values)
+            this.setState({ curriculumsModal: false })
+          }}
           curriculums={this.props.allCurriculums}
-          versionCurriculums={this.state.curriculums}
+          versionCurriculums={this.props.curriculums}
         />
       </div>
     )

@@ -3,7 +3,7 @@ import { Modal, Form, Select } from 'antd'
 
 const { Option } = Select
 
-class CurriculumsModal extends React.Component {
+class PeriodsModal extends React.Component {
   handleCancel = () => {
     this.setState({ visible: false })
   }
@@ -23,11 +23,11 @@ class CurriculumsModal extends React.Component {
     this.formRef = formRef
   }
   render() {
-    let { curriculums, versionCurriculums } = this.props
+    let { periods, versionPeriods } = this.props
     const { visible, onCancel, form } = this.props
     const { getFieldDecorator } = form
-    curriculums = curriculums.filter(
-      c => !versionCurriculums.find(cu => cu.id === c.id)
+    periods = periods.filter(
+      period => !versionPeriods.find(vp => vp.id === period.id)
     )
     const formItemLayout = {
       labelCol: {
@@ -42,26 +42,26 @@ class CurriculumsModal extends React.Component {
     return (
       <Modal
         visible={visible}
-        title='Ajouter un cursus'
+        title='Ajouter une période'
         okText='Ajouter'
         onCancel={onCancel}
         onOk={this.handleCreate}
       >
         <Form>
-          <Form.Item {...formItemLayout} label='Cursus'>
-            {getFieldDecorator('curriculum', {
+          <Form.Item {...formItemLayout} label='Période'>
+            {getFieldDecorator('period', {
               rules: [
                 {
                   required: true,
-                  message: 'Vous devez choisir un curriculums à ajouter'
+                  message: 'Vous devez choisir une periode à ajouter'
                 }
               ]
             })(
               <Select
                 showSearch
-                notFoundContent='Aucun curriculums disponible'
+                notFoundContent='Aucune periode disponible'
                 style={{ width: 200 }}
-                placeholder='Sélectionnez un cursus'
+                placeholder='Sélectionnez une période'
                 optionFilterProp='children'
                 filterOption={(input, option) =>
                   option.props.children
@@ -69,7 +69,7 @@ class CurriculumsModal extends React.Component {
                     .indexOf(input.toLowerCase()) >= 0
                 }
               >
-                {curriculums.map(item => (
+                {periods.map(item => (
                   <Option value={item.id} key={item.id}>
                     {item.name}
                   </Option>
@@ -82,8 +82,8 @@ class CurriculumsModal extends React.Component {
     )
   }
 }
-const CurriculumsModalForm = Form.create({ name: 'curriculums-modal' })(
-  CurriculumsModal
+const PeriodsModalForm = Form.create({ name: 'periods-modal' })(
+  PeriodsModal
 )
 
-export default CurriculumsModalForm
+export default PeriodsModalForm

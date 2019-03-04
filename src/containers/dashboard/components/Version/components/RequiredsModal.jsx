@@ -3,7 +3,7 @@ import { Modal, Form, Select } from 'antd'
 
 const { Option } = Select
 
-class CurriculumsModal extends React.Component {
+class RequiredsModal extends React.Component {
   handleCancel = () => {
     this.setState({ visible: false })
   }
@@ -23,11 +23,11 @@ class CurriculumsModal extends React.Component {
     this.formRef = formRef
   }
   render() {
-    let { curriculums, versionCurriculums } = this.props
+    let { ues, versionRequireds } = this.props
     const { visible, onCancel, form } = this.props
     const { getFieldDecorator } = form
-    curriculums = curriculums.filter(
-      c => !versionCurriculums.find(cu => cu.id === c.id)
+    ues = ues.filter(
+      ue => !versionRequireds.find(required => required.id === ue.id)
     )
     const formItemLayout = {
       labelCol: {
@@ -42,26 +42,26 @@ class CurriculumsModal extends React.Component {
     return (
       <Modal
         visible={visible}
-        title='Ajouter un cursus'
+        title='Ajouter une UE prérequise'
         okText='Ajouter'
         onCancel={onCancel}
         onOk={this.handleCreate}
       >
         <Form>
-          <Form.Item {...formItemLayout} label='Cursus'>
-            {getFieldDecorator('curriculum', {
+          <Form.Item {...formItemLayout} label='UE'>
+            {getFieldDecorator('required', {
               rules: [
                 {
                   required: true,
-                  message: 'Vous devez choisir un curriculums à ajouter'
+                  message: 'Vous devez choisir une UE à ajouter'
                 }
               ]
             })(
               <Select
                 showSearch
-                notFoundContent='Aucun curriculums disponible'
+                notFoundContent='Aucune UE disponible'
                 style={{ width: 200 }}
-                placeholder='Sélectionnez un cursus'
+                placeholder='Sélectionnez une UE'
                 optionFilterProp='children'
                 filterOption={(input, option) =>
                   option.props.children
@@ -69,11 +69,31 @@ class CurriculumsModal extends React.Component {
                     .indexOf(input.toLowerCase()) >= 0
                 }
               >
-                {curriculums.map(item => (
-                  <Option value={item.id} key={item.id}>
-                    {item.name}
+                {ues.map(ue => (
+                  <Option value={ue.id} key={ue.id}>
+                    {ue.name}
                   </Option>
                 ))}
+              </Select>
+            )}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='Importance'>
+            {getFieldDecorator('value', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Vous devez choisir une importance associée'
+                }
+              ]
+            })(
+              <Select
+                style={{ width: 200 }}
+                placeholder='Sélectionnez une importance'
+              >
+              <Option value='Optionnelle'>Optionnelle</Option>
+              <Option value='Conseillée'>Conseillée</Option>
+              <Option value='Fortement Conseillée'>Fortement Conseillée</Option>
+              <Option value='Requise'>Requise</Option>
               </Select>
             )}
           </Form.Item>
@@ -82,8 +102,8 @@ class CurriculumsModal extends React.Component {
     )
   }
 }
-const CurriculumsModalForm = Form.create({ name: 'curriculums-modal' })(
-  CurriculumsModal
+const RequiredsModalForm = Form.create({ name: 'requireds-modal' })(
+  RequiredsModal
 )
 
-export default CurriculumsModalForm
+export default RequiredsModalForm

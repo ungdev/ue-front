@@ -5,11 +5,15 @@ import { connect } from 'react-redux'
 import { fetchLastUEVersion } from '../../../../modules/versions'
 import { fetchAttributes } from '../../../../modules/attributes'
 import { fetchCurriculums } from '../../../../modules/curriculums'
+import { fetchPeriods } from '../../../../modules/periods'
 import { fetchUEs } from '../../../../modules/ues'
 
 import AttributesList from './components/AttributesList'
 import AttributesModal from './components/AttributesModal'
 import CurriculumsList from './components/CurriculumsList'
+import PeriodsList from './components/PeriodsList'
+import RequiredsList from './components/RequiredsList'
+import RequiredsModal from './components/RequiredsModal'
 
 class Create extends React.Component {
   constructor(props) {
@@ -17,18 +21,22 @@ class Create extends React.Component {
     this.state = {
       attributes: null,
       curriculums: null,
+      periods: null,
+      requireds: null,
       attributesModal: false,
+      requiredsModal: false
     }
     props.fetchLastUEVersion(props.ueId)
     props.fetchUEs()
     props.fetchAttributes()
     props.fetchCurriculums()
+    props.fetchPeriods()
   }
   handleSubmit = e => {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log(values)
+        console.log(values) // TODO save version
       }
     })
   }
@@ -42,6 +50,16 @@ class Create extends React.Component {
     let { curriculums } = this.state
     curriculums = curriculums.filter(c => c.id !== id)
     this.setState({ curriculums })
+  }
+  removePeriod = id => {
+    let { periods } = this.state
+    periods = periods.filter(c => c.id !== id)
+    this.setState({ periods })
+  }
+  removeRequired = id => {
+    let { requireds } = this.state
+    requireds = requireds.filter(required => required.id !== id)
+    this.setState({ requireds })
   }
 
   addAttribute = values => {
@@ -59,9 +77,29 @@ class Create extends React.Component {
   addCurriculum = values => {
     let { curriculums } = this.state
     if (!curriculums) curriculums = []
-    const c = this.props.curriculums.find(cu => cu.id === values.curriculums)
+    const c = this.props.curriculums.find(cu => cu.id === values.curriculum)
     curriculums.push(c)
     this.setState({ curriculums })
+  }
+  addPeriod = values => {
+    let { periods } = this.state
+    if (!periods) periods = []
+    const period = this.props.periods.find(p => p.id === values.period)
+    periods.push(period)
+    this.setState({ periods })
+  }
+  addRequired = values => {
+    let { requireds } = this.state
+    if (!requireds) requireds = []
+    const item = this.props.ues.find(
+      ue => ue.id === values.required
+    )
+    requireds.push({
+      id: item.id,
+      name: item.name,
+      value: values.value
+    })
+    this.setState({ requiredsModal: false, requireds })
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -69,8 +107,14 @@ class Create extends React.Component {
     let version = versions.find(v => v.ueId === ueId)
     if (version) {
       if (
-        (version.attributes.length > 0 || version.curriculums.length > 0) &&
-        (!prevState.attributes || !prevState.curriculums)
+        (version.attributes.length > 0 ||
+          version.curriculums.length > 0 ||
+          version.requireds.length > 0 ||
+          version.periods.length > 0) &&
+        (!prevState.attributes ||
+          !prevState.curriculums ||
+          !prevState.periods ||
+          !prevState.requireds)
       ) {
         return {
           attributes: version.attributes.map(attribute => {
@@ -80,12 +124,9 @@ class Create extends React.Component {
               value: attribute.attribute_version.value
             }
           }),
-          curriculums: version.curriculums.map(curriculum => {
-            return {
-              id: curriculum.id,
-              name: curriculum.name
-            }
-          })
+          curriculums: version.curriculums,
+          periods: version.periods,
+          requireds: version.requireds
         }
       }
     }
@@ -99,7 +140,7 @@ class Create extends React.Component {
     if (!version || !ue) {
       return <Spin />
     }
-    const { attributes, curriculums } = this.state
+    const { attributes, curriculums, periods, requireds } = this.state
     const { getFieldDecorator } = this.props.form
 
     const formItemLayout = {
@@ -128,7 +169,6 @@ class Create extends React.Component {
     return (
       <React.Fragment>
         <Form onSubmit={this.handleSubmit}>
-          <h1>Créer une nouvelle version pour {ue.name}</h1>
           <Form.Item {...formItemLayout} label='Titre'>
             {getFieldDecorator('title', {
               rules: [
@@ -209,7 +249,7 @@ class Create extends React.Component {
           </h2>
           <AttributesList
             attributes={attributes}
-            removeAttribute={id => this.removeAttribute(id)}
+            removeAttribute={this.removeAttribute}
           />
 
           <h2 style={{ textAlign: 'center', marginTop: '20px' }}>Cursus</h2>
@@ -221,8 +261,39 @@ class Create extends React.Component {
           <CurriculumsList
             curriculums={curriculums}
             allCurriculums={this.props.curriculums}
-            removeCurriculum={id => this.removeCurriculum(id)}
+            removeCurriculum={this.removeCurriculum}
             addCurriculum={this.addCurriculum}
+          />
+
+          <h2 style={{ textAlign: 'center' }}>Périodes</h2>
+          <p>
+            Une période correspond généralement au semestre où sera disponibe
+            l'UE (Automne/Printemps).
+          </p>
+          <PeriodsList
+            periods={periods}
+            allPeriods={this.props.periods}
+            removePeriod={this.removePeriod}
+            addPeriod={this.addPeriod}
+          />
+
+          <h2 style={{ textAlign: 'center' }}>
+            <span>
+              UEs prérequises&nbsp;
+              <Tooltip title='Ajouter une UE prérequise'>
+                <Button
+                  type='primary'
+                  shape='circle'
+                  icon='plus'
+                  size='small'
+                  onClick={() => this.setState({ requiredsModal: true })}
+                />
+              </Tooltip>
+            </span>
+          </h2>
+          <RequiredsList
+            requireds={requireds}
+            removeRequired={this.removeRequired}
           />
 
           <Form.Item {...tailFormItemLayout}>
@@ -239,6 +310,13 @@ class Create extends React.Component {
           attributes={this.props.attributes}
           versionAttributes={this.state.attributes}
         />
+        <RequiredsModal
+          visible={this.state.requiredsModal}
+          onCancel={() => this.setState({ requiredsModal: false })}
+          returnValue={this.addRequired}
+          ues={this.props.ues}
+          versionRequireds={this.state.requireds}
+        />
       </React.Fragment>
     )
   }
@@ -249,14 +327,16 @@ const mapStateToProps = state => ({
   versions: state.versions.versions,
   ues: state.ues.ues,
   attributes: state.attributes.attributes,
-  curriculums: state.curriculums.curriculums
+  curriculums: state.curriculums.curriculums,
+  periods: state.periods.periods
 })
 
 const mapDispatchToProps = dispatch => ({
   fetchUEs: () => dispatch(fetchUEs()),
   fetchLastUEVersion: id => dispatch(fetchLastUEVersion(id)),
   fetchAttributes: () => dispatch(fetchAttributes()),
-  fetchCurriculums: () => dispatch(fetchCurriculums())
+  fetchCurriculums: () => dispatch(fetchCurriculums()),
+  fetchPeriods: () => dispatch(fetchPeriods())
 })
 
 export default connect(

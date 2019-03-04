@@ -20,7 +20,6 @@ class UEListActions extends React.Component {
     let ue = ues.find(u => u.id === match.params.id)
     let version = versions.find(v => v.ueId === match.params.id)
     if (!version || !ue) return <Spin />
-    console.log(versions[0], ues)
     const columns = [
       {
         title: 'Nom',
