@@ -10,7 +10,6 @@ import { fetchUEs } from '../../../../modules/ues'
 import AttributesList from './components/AttributesList'
 import AttributesModal from './components/AttributesModal'
 import CurriculumsList from './components/CurriculumsList'
-import CurriculumsModal from './components/CurriculumsModal'
 
 class Create extends React.Component {
   constructor(props) {
@@ -19,9 +18,8 @@ class Create extends React.Component {
       attributes: null,
       curriculums: null,
       attributesModal: false,
-      curriculumsModal: false
     }
-    props.fetchLastUEVersion(props.match.params.id)
+    props.fetchLastUEVersion(props.ueId)
     props.fetchUEs()
     props.fetchAttributes()
     props.fetchCurriculums()
@@ -40,7 +38,7 @@ class Create extends React.Component {
     attributes = attributes.filter(attribute => attribute.id !== id)
     this.setState({ attributes })
   }
-  removeCurriculums = id => {
+  removeCurriculum = id => {
     let { curriculums } = this.state
     curriculums = curriculums.filter(c => c.id !== id)
     this.setState({ curriculums })
@@ -58,18 +56,16 @@ class Create extends React.Component {
     this.setState({ attributesModal: false, attributes })
   }
 
-  addCurriculums = values => {
-    console.log(values)
+  addCurriculum = values => {
     let { curriculums } = this.state
     if (!curriculums) curriculums = []
     const c = this.props.curriculums.find(cu => cu.id === values.curriculums)
     curriculums.push(c)
-    this.setState({ curriculumsModal: false, curriculums })
+    this.setState({ curriculums })
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { versions, match } = nextProps
-    const ueId = match.params.id
+    const { versions, ueId } = nextProps
     let version = versions.find(v => v.ueId === ueId)
     if (version) {
       if (
@@ -97,11 +93,9 @@ class Create extends React.Component {
   }
 
   render() {
-    const { versions, match, ues } = this.props
-    const ueId = match.params.id
+    const { versions, ueId, ues } = this.props
     let version = versions.find(v => v.ueId === ueId)
     let ue = ues.find(u => u.id === ueId)
-    console.log(version, this.state)
     if (!version || !ue) {
       return <Spin />
     }
@@ -218,20 +212,7 @@ class Create extends React.Component {
             removeAttribute={id => this.removeAttribute(id)}
           />
 
-          <h2 style={{ textAlign: 'center' }}>
-            <span>
-              Cursus&nbsp;
-              <Tooltip title='Ajouter un cursus'>
-                <Button
-                  type='primary'
-                  shape='circle'
-                  icon='plus'
-                  size='small'
-                  onClick={() => this.setState({ curriculumsModal: true })}
-                />
-              </Tooltip>
-            </span>
-          </h2>
+          <h2 style={{ textAlign: 'center', marginTop: '20px' }}>Cursus</h2>
           <p>
             Un cursus défini à quels niveaux est ouvert l'UE. Exemple :
             Ingénieur donnera accès à cette UE à tous les étudiants ingénieurs
@@ -239,7 +220,9 @@ class Create extends React.Component {
           </p>
           <CurriculumsList
             curriculums={curriculums}
-            removeCurriculums={id => this.removeCurriculums(id)}
+            allCurriculums={this.props.curriculums}
+            removeCurriculum={id => this.removeCurriculum(id)}
+            addCurriculum={this.addCurriculum}
           />
 
           <Form.Item {...tailFormItemLayout}>
@@ -255,13 +238,6 @@ class Create extends React.Component {
           returnValue={this.addAttribute}
           attributes={this.props.attributes}
           versionAttributes={this.state.attributes}
-        />
-        <CurriculumsModal
-          visible={this.state.curriculumsModal}
-          onCancel={() => this.setState({ curriculumsModal: false })}
-          returnValue={this.addCurriculums}
-          curriculums={this.props.curriculums}
-          versionCurriculums={this.state.curriculums}
         />
       </React.Fragment>
     )

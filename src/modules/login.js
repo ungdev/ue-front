@@ -43,7 +43,6 @@ export const getToken = code => {
   return async dispatch => {
     try {
       const res = await axios.post('etuutt/token', { code })
-      console.log(res)
       dispatch(saveToken(res.data.access_token))
       dispatch(push('/dashboard/home'))
       dispatch(

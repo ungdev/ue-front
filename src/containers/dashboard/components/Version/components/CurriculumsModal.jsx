@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Form, Select, Input } from 'antd'
+import { Modal, Form, Select } from 'antd'
 
 const { Option } = Select
 
@@ -49,7 +49,7 @@ class CurriculumsModal extends React.Component {
       >
         <Form>
           <Form.Item {...formItemLayout} label='Cursus'>
-            {getFieldDecorator('curriculums', {
+            {getFieldDecorator('curriculum', {
               rules: [
                 {
                   required: true,

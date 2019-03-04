@@ -30,14 +30,13 @@ class AttributesList extends React.Component {
         )
       }
     ]
-    const data = attributes.map(a => {
-      return { ...a, key: a.id }
-    })
     return (
       <Table
-        dataSource={data}
+        dataSource={attributes}
         columns={columns}
+        rowKey='id'
         locale={{ emptyText: 'Aucun attributs' }}
+        pagination={attributes.length > 10}
       />
     )
   }

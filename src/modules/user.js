@@ -1,6 +1,6 @@
 import axios from '../lib/axios'
-import errorToString from '../lib/errorToString'
-import { actions as notifActions } from 'redux-notifications'
+//import errorToString from '../lib/errorToString'
+//import { actions as notifActions } from 'redux-notifications'
 import { logout } from './login'
 
 export const SET_USER = 'user/SET_USER'
@@ -11,7 +11,6 @@ const initialState = {
 }
 
 export default (state = initialState, action) => {
-  let user = null
   switch (action.type) {
     case SET_USER:
       return {
@@ -31,7 +30,6 @@ export const fetchUser = () => {
     }
     try {
       const res = await axios.get('etuutt/user', { headers: { 'X-Token': authToken } })
-      console.log(res)
       dispatch({ type: SET_USER, payload: res.data })
     } catch (err) {
       dispatch(logout())

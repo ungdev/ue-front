@@ -1,39 +1,44 @@
 import React from 'react'
-import { Table, Icon, Tooltip } from 'antd'
+import { Tag, Icon } from 'antd'
+import CurriculumsModal from './CurriculumsModal'
 
 class CurriculumsList extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      curriculums: props.curriculums,
+      curriculumsModal: false
+    }
+  }
   render() {
-    const { curriculums } = this.props
-    const columns = [
-      {
-        title: 'Nom',
-        dataIndex: 'name',
-        key: 'name'
-      },
-      {
-        title: 'Actions',
-        dataIndex: 'id',
-        render: id => (
-          <Tooltip placement='top' title="Supprimer le cursus">
-            <a
-              onClick={() => this.props.removeCurriculums(id)}
-              style={{ fontSize: '18px' }}
-            >
-              <Icon type='delete' />
-            </a>
-          </Tooltip>
-        )
-      }
-    ]
-    const data = curriculums.map(a => {
-      return { ...a, key: a.id }
-    })
+    const { curriculums } = this.state
     return (
-      <Table
-        dataSource={data}
-        columns={columns}
-        locale={{ emptyText: 'Aucun curus' }}
-      />
+      <div style={{ marginBottom: '20px' }}>
+        {curriculums.map(curriculum => (
+          <Tag
+            key={curriculum.id}
+            closable={true}
+            afterClose={() => this.props.removeCurriculum(curriculum.id)}
+            onClick={() => this.props.removeCurriculum(curriculum.id)}
+            color='geekblue'
+          >
+            {curriculum.name}
+          </Tag>
+        ))}
+        <Tag
+          onClick={() => this.setState({ curriculumsModal: true })}
+          style={{ background: '#fff', borderStyle: 'dashed' }}
+        >
+          <Icon type='plus' /> Ajouter un cursus
+        </Tag>
+        <CurriculumsModal
+          visible={this.state.curriculumsModal}
+          onCancel={() => this.setState({ curriculumsModal: false })}
+          returnValue={this.props.addCurriculums}
+          curriculums={this.props.allCurriculums}
+          versionCurriculums={this.state.curriculums}
+        />
+      </div>
     )
   }
 }

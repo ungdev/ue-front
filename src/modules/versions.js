@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
       }
     case ADD_VERSION:
       versions = state.versions.slice()
-      const index = versions.findIndex(version => version.i === action.payload.id)
+      const index = versions.findIndex(version => version.id === action.payload.id)
       if(index === -1) versions.push(action.payload)
       else versions[index] = action.payload
       return {

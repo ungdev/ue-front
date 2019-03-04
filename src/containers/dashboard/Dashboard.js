@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 
 import DashboardHome from './components/Accueil'
 import DashboardLoading from './components/Loading'
-import CreateVersion from './components/Version/Create'
 import ListUEs from './components/UE/List'
+import UEDetails from './components/UE/components/UEDetails'
 import DashboardLayout from './layout'
 import { autoLogin } from '../../modules/login'
 
@@ -17,14 +17,14 @@ class Dashboard extends React.Component {
   constructor() {
     super()
     this.state = {
-      render: false //set to false when login will be ready
+      render: false
     }
   }
 
   componentWillMount() {
     this.props.autoLogin().then(() => {
       this.setState({
-        render: true //this.props.user && this.props.user
+        render: this.props.user && this.props.user
       })
     })
   }
@@ -39,13 +39,8 @@ class Dashboard extends React.Component {
         {this.state.render && (
           <Route path={baseUrl + 'ues'} exact component={ListUEs} />
         )}
-
         {this.state.render && (
-          <Route
-            path={baseUrl + 'ues/:id/versions/create'}
-            exact
-            component={CreateVersion}
-          />
+          <Route path={baseUrl + 'ues/:id'} exact component={UEDetails} />
         )}
 
         {this.state.render && <Redirect from='*' to='/dashboard/home' />}

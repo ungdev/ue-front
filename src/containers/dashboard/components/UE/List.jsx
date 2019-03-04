@@ -2,6 +2,7 @@ import React from 'react'
 import { Table, Spin } from 'antd'
 import { fetchUEs } from '../../../../modules/ues'
 import { connect } from 'react-redux'
+import UEListActions from './components/UEListActions'
 
 class List extends React.Component {
   constructor(props) {
@@ -23,6 +24,12 @@ class List extends React.Component {
         title: 'Nom',
         dataIndex: 'name',
         key: 'name'
+      },
+      {
+        title: 'Action',
+        dataIndex: 'id',
+        key: 'id',
+        render: id => <UEListActions ueId={id} />
       }
     ]
     const data = ues.map(ue => {
