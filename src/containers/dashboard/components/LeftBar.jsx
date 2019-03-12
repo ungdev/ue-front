@@ -66,8 +66,14 @@ class LeftBar extends React.Component {
           </Menu.Item>
           <Menu.Item key='curriculums'>
             <Link to={'/dashboard/curriculums'}>
-              <Icon type='block' />
+              <Icon type='branches' />
               <span>Gestion des Cursus</span>
+            </Link>
+          </Menu.Item>
+          <Menu.Item key='periods'>
+            <Link to={'/dashboard/periods'}>
+              <Icon type='clock-circle' />
+              <span>Gestion des Périodes</span>
             </Link>
           </Menu.Item>
         </Menu>

@@ -16,6 +16,7 @@ import ListAttributes from './components/Attribute/List'
 
 import CurriculumsTree from './components/Curriculums/Tree'
 
+import ListPeriods from './components/Period/List'
 
 
 //  redux
@@ -64,6 +65,10 @@ class Dashboard extends React.Component {
 
         {this.state.render && (
           <Route path={baseUrl + 'curriculums'} exact component={CurriculumsTree} />
+        )}
+
+        {this.state.render && (
+          <Route path={baseUrl + 'periods'} exact component={ListPeriods} />
         )}
 
         {this.state.render && <Redirect from='*' to='/dashboard/home' />}

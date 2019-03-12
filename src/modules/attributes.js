@@ -35,7 +35,9 @@ export default (state = initialState, action) => {
       }
     case EDIT_ATTRIBUTE:
       attributes = state.attributes.slice()
-      const index = attributes.findIndex(attribute => attribute.id === action.payload.id)
+      const index = attributes.findIndex(
+        attribute => attribute.id === action.payload.id
+      )
       attributes[index].name = action.payload.name
       return {
         ...state,
@@ -103,7 +105,8 @@ export const editAttribute = (id, name) => {
   return async dispatch => {
     try {
       const res = await axios.put(`attributes/${id}`, { name })
-      if (res.status === 200) dispatch({ type: EDIT_ATTRIBUTE, payload: {id, name} })
+      if (res.status === 200)
+        dispatch({ type: EDIT_ATTRIBUTE, payload: { id, name } })
     } catch (err) {
       dispatch(
         notifActions.notifSend({
