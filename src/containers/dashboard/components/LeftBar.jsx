@@ -3,7 +3,6 @@ import { Layout, Menu, Icon } from 'antd'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 const { Sider } = Layout
-const { SubMenu } = Menu
 
 class LeftBar extends React.Component {
   constructor(props) {
@@ -50,33 +49,21 @@ class LeftBar extends React.Component {
           <Menu.Item key='home'>
             <Link to={'/dashboard/home'}>
               <Icon type='home' />
-              <span className='nav-text'>Accueil</span>
+              <span>Accueil</span>
             </Link>
           </Menu.Item>
           <Menu.Item key='ues'>
             <Link to={'/dashboard/ues'}>
               <Icon type='bars' />
-              <span className='nav-text'>Liste des UEs</span>
+              <span>Liste des UEs</span>
             </Link>
           </Menu.Item>
-
-          {/* MENU USER */}
-          <SubMenu
-            key='ue'
-            title={
-              <span>
-                <Icon type='user' />
-                <span>UE</span>
-              </span>
-            }
-          >
-            <Menu.Item key='ue/create'>
-              <Link to={'/dashboard/ue/create'}>
-                <Icon type='file' />
-                <span className='nav-text'>Créer une UE</span>
-              </Link>
-            </Menu.Item>
-          </SubMenu>
+          <Menu.Item key='attributes'>
+            <Link to={'/dashboard/attributes'}>
+              <Icon type='block' />
+              <span>Gestion des Attributs</span>
+            </Link>
+          </Menu.Item>
         </Menu>
       </Sider>
     )

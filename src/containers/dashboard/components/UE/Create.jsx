@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Tooltip, Icon, Button, Spin, InputNumber } from 'antd'
+import { Form, Input, Tooltip, Icon, Button, InputNumber } from 'antd'
 
 import { connect } from 'react-redux'
 import { createUE } from '../../../../modules/ues'

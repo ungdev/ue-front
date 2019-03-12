@@ -4,9 +4,6 @@ import { Modal, Form, Select, Input } from 'antd'
 const { Option } = Select
 
 class AttributesModal extends React.Component {
-  handleCancel = () => {
-    this.setState({ visible: false })
-  }
   handleCreate = () => {
     const { form } = this.props
     form.validateFields((err, values) => {

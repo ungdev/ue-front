@@ -34,7 +34,12 @@ class List extends React.Component {
     const data = ues.map(ue => {
       return { ...ue, key: ue.id }
     })
-    return <Table dataSource={data} columns={columns} />
+    return (
+      <React.Fragment>
+        <h1>Liste des UEs</h1>
+        <Table dataSource={data} columns={columns} />
+      </React.Fragment>
+    )
   }
 }
 

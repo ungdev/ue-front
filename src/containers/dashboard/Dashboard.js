@@ -2,12 +2,21 @@ import React from 'react'
 import { Route, Redirect, Switch } from 'react-router'
 import { connect } from 'react-redux'
 
-import DashboardHome from './components/Accueil'
 import DashboardLoading from './components/Loading'
+import DashboardHome from './components/Accueil'
+import DashboardLayout from './layout'
+
+//  pages
+
 import ListUEs from './components/UE/List'
 import CreateUE from './components/UE/Create'
 import UEDetails from './components/UE/components/UEDetails'
-import DashboardLayout from './layout'
+
+import ListAttributes from './components/Attribute/List'
+
+
+
+//  redux
 import { autoLogin } from '../../modules/login'
 
 import './dashboard.css'
@@ -45,6 +54,10 @@ class Dashboard extends React.Component {
         )}
         {this.state.render && (
           <Route path={baseUrl + 'ues/:id'} exact component={UEDetails} />
+        )}
+
+        {this.state.render && (
+          <Route path={baseUrl + 'attributes'} exact component={ListAttributes} />
         )}
 
         {this.state.render && <Redirect from='*' to='/dashboard/home' />}
