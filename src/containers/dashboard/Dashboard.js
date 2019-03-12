@@ -14,6 +14,8 @@ import UEDetails from './components/UE/components/UEDetails'
 
 import ListAttributes from './components/Attribute/List'
 
+import CurriculumsTree from './components/Curriculums/Tree'
+
 
 
 //  redux
@@ -58,6 +60,10 @@ class Dashboard extends React.Component {
 
         {this.state.render && (
           <Route path={baseUrl + 'attributes'} exact component={ListAttributes} />
+        )}
+
+        {this.state.render && (
+          <Route path={baseUrl + 'curriculums'} exact component={CurriculumsTree} />
         )}
 
         {this.state.render && <Redirect from='*' to='/dashboard/home' />}
