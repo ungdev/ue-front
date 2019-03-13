@@ -33,26 +33,53 @@ class UEListActions extends React.Component {
         render: att_v => att_v.value
       }
     ]
+    let categorie = null
+    if (version.attributes) {
+      categorie = version.attributes.find(
+        attribute => attribute.attribute_version.value === 'categorie'
+      )
+    }
     return (
       <React.Fragment>
         <h1>
-          {ue.name} : {version.title} ({version.ECTS} crédits)
+          {ue.name} : {version.title}
         </h1>
-        <Button
-          type='primary'
-          onClick={() => this.setState({ createDrawer: true })}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap'
+          }}
         >
-          Créer une nouvelle version
-        </Button>
+          <Button
+            type='primary'
+            onClick={() => this.setState({ createDrawer: true })}
+          >
+            Créer une nouvelle version
+          </Button>
+          {categorie && <h2>Catégorie: {categorie.name}</h2>}
+          <h2 style={{ marginRight: '20px' }}>{version.ECTS} crédits</h2>
+        </div>
         <Divider orientation='left'>Objectifs</Divider>
         <p>{version.goals}</p>
         <Divider orientation='left'>Programme</Divider>
-        <p>{version.programme}</p>
+        <p>
+          {version.programme
+            .replace('•', ' \n •')
+            .split('\n')
+            .map((item, i) => (
+              <p key={i} style={{ marginBottom: '5px' }}>
+                {item}
+              </p>
+            ))}
+        </p>
         {version.attributes.length > 0 && (
           <React.Fragment>
             <Divider orientation='left'>Attributs</Divider>
             <Table
-              dataSource={version.attributes}
+              dataSource={version.attributes.filter(
+                attribute => categorie && attribute.id !== categorie.id
+              )}
               columns={columns}
               rowKey='id'
               pagination={version.attributes.length > 10}
