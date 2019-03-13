@@ -61,7 +61,16 @@ class UEListActions extends React.Component {
           <h2 style={{ marginRight: '20px' }}>{version.ECTS} crédits</h2>
         </div>
         <Divider orientation='left'>Objectifs</Divider>
-        <p>{version.goals}</p>
+        <p>
+          {version.goals
+            .replace('•', ' \n •')
+            .split('\n')
+            .map((item, i) => (
+              <p key={i} style={{ marginBottom: '5px' }}>
+                {item}
+              </p>
+            ))}
+        </p>
         <Divider orientation='left'>Programme</Divider>
         <p>
           {version.programme
@@ -77,9 +86,13 @@ class UEListActions extends React.Component {
           <React.Fragment>
             <Divider orientation='left'>Attributs</Divider>
             <Table
-              dataSource={version.attributes.filter(
-                attribute => categorie && attribute.id !== categorie.id
-              )}
+              dataSource={version.attributes
+                .filter(attribute => categorie && attribute.id !== categorie.id)
+                .sort((a, b) => {
+                  if (a.name > b.name) return 1
+                  if (a.name < b.name) return -1
+                  return 0
+                })}
               columns={columns}
               rowKey='id'
               pagination={version.attributes.length > 10}
