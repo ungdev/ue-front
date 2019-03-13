@@ -27,7 +27,7 @@ class RequiredsModal extends React.Component {
     const { visible, onCancel, form } = this.props
     const { getFieldDecorator } = form
     ues = ues.filter(
-      ue => !versionRequireds.find(required => required.id === ue.id)
+      ue => versionRequireds && !versionRequireds.find(required => required.id === ue.id)
     )
     const formItemLayout = {
       labelCol: {

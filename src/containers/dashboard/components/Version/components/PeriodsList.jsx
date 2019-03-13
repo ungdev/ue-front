@@ -13,17 +13,18 @@ class PeriodsList extends React.Component {
     const { periods, allPeriods } = this.props
     return (
       <div style={{ marginBottom: '20px' }}>
-        {periods.map(period => (
-          <Tag
-            key={period.id}
-            closable={true}
-            afterClose={() => this.props.removePeriod(period.id)}
-            onClick={() => this.props.removePeriod(period.id)}
-            color='geekblue'
-          >
-            {period.name}
-          </Tag>
-        ))}
+        {periods &&
+          periods.map(period => (
+            <Tag
+              key={period.id}
+              closable={true}
+              afterClose={() => this.props.removePeriod(period.id)}
+              onClick={() => this.props.removePeriod(period.id)}
+              color='geekblue'
+            >
+              {period.name}
+            </Tag>
+          ))}
         <Tag
           onClick={() => this.setState({ periodsModal: true })}
           style={{ background: '#fff', borderStyle: 'dashed' }}

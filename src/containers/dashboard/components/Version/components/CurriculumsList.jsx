@@ -13,17 +13,18 @@ class CurriculumsList extends React.Component {
     const { curriculums } = this.props
     return (
       <div style={{ marginBottom: '20px' }}>
-        {curriculums.map(curriculum => (
-          <Tag
-            key={curriculum.id}
-            closable={true}
-            afterClose={() => this.props.removeCurriculum(curriculum.id)}
-            onClick={() => this.props.removeCurriculum(curriculum.id)}
-            color='geekblue'
-          >
-            {curriculum.name}
-          </Tag>
-        ))}
+        {curriculums &&
+          curriculums.map(curriculum => (
+            <Tag
+              key={curriculum.id}
+              closable={true}
+              afterClose={() => this.props.removeCurriculum(curriculum.id)}
+              onClick={() => this.props.removeCurriculum(curriculum.id)}
+              color='geekblue'
+            >
+              {curriculum.name}
+            </Tag>
+          ))}
         <Tag
           onClick={() => this.setState({ curriculumsModal: true })}
           style={{ background: '#fff', borderStyle: 'dashed' }}

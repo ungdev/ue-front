@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Spin } from 'antd'
+import { Table, Spin, Input } from 'antd'
 import { fetchUEs } from '../../../../modules/ues'
 import { connect } from 'react-redux'
 import UEListActions from './components/UEListActions'
@@ -7,22 +7,24 @@ import UEListActions from './components/UEListActions'
 class List extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      search: ''
+    }
     props.fetchUEs()
   }
   render() {
-    const { ues } = this.props
-    if (!ues) return <Spin />
-
+    let { ues } = this.props
+    if (!ues) ues = []
     const columns = [
-      {
-        title: 'Code',
-        dataIndex: 'code',
-        key: 'code'
-      },
       {
         title: 'Nom',
         dataIndex: 'name',
         key: 'name'
+      },
+      {
+        title: 'Titre',
+        dataIndex: 'title',
+        key: 'title'
       },
       {
         title: 'Action',
@@ -31,12 +33,24 @@ class List extends React.Component {
         render: id => <UEListActions ueId={id} />
       }
     ]
-    const data = ues.map(ue => {
-      return { ...ue, key: ue.id }
-    })
+    const data = ues
+      .filter(ue => {
+        let full = `${ue.name}${ue.title}`
+        return (
+          full.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1
+        )
+      })
+      .map(ue => {
+        return { ...ue, key: ue.id }
+      })
     return (
       <React.Fragment>
         <h1>Liste des UEs</h1>
+        <Input
+          onChange={e => this.setState({ search: e.target.value })}
+          placeholder='Rechercher une UE...'
+          style={{ marginBottom: '20px' }}
+        />
         <Table dataSource={data} columns={columns} />
       </React.Fragment>
     )

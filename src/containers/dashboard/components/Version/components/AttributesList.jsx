@@ -3,7 +3,8 @@ import { Table, Icon, Tooltip } from 'antd'
 
 class AttributesList extends React.Component {
   render() {
-    const { attributes } = this.props
+    let { attributes } = this.props
+    if (!attributes) attributes = []
     const columns = [
       {
         title: 'Nom',

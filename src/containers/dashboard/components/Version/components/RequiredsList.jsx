@@ -3,7 +3,8 @@ import { Table, Icon, Tooltip } from 'antd'
 
 class RequiredsList extends React.Component {
   render() {
-    const { requireds } = this.props
+    let { requireds } = this.props
+    if (!requireds) requireds = []
     const columns = [
       {
         title: 'Nom',
@@ -19,7 +20,7 @@ class RequiredsList extends React.Component {
         title: 'Actions',
         dataIndex: 'id',
         render: id => (
-          <Tooltip placement='top' title="Supprimer le prérequis">
+          <Tooltip placement='top' title='Supprimer le prérequis'>
             <a
               onClick={() => this.props.removeRequired(id)}
               style={{ fontSize: '18px' }}
