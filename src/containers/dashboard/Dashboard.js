@@ -30,14 +30,14 @@ class Dashboard extends React.Component {
   constructor() {
     super()
     this.state = {
-      render: false
+      render: true
     }
   }
 
   componentWillMount() {
     this.props.autoLogin().then(() => {
       this.setState({
-        render: this.props.user && this.props.user
+        render: true//this.props.user && this.props.user
       })
     })
   }

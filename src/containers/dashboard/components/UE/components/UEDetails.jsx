@@ -61,27 +61,23 @@ class UEListActions extends React.Component {
           <h2 style={{ marginRight: '20px' }}>{version.ECTS} crédits</h2>
         </div>
         <Divider orientation='left'>Objectifs</Divider>
-        <p>
-          {version.goals
-            .replace('•', ' \n •')
-            .split('\n')
-            .map((item, i) => (
-              <p key={i} style={{ marginBottom: '5px' }}>
-                {item}
-              </p>
-            ))}
-        </p>
+        {version.goals
+          .replace('•', ' \n •')
+          .split('\n')
+          .map((item, i) => (
+            <p key={i} style={{ marginBottom: '5px' }}>
+              {item}
+            </p>
+          ))}
         <Divider orientation='left'>Programme</Divider>
-        <p>
-          {version.programme
-            .replace('•', ' \n •')
-            .split('\n')
-            .map((item, i) => (
-              <p key={i} style={{ marginBottom: '5px' }}>
-                {item}
-              </p>
-            ))}
-        </p>
+        {version.programme
+          .replace('•', ' \n •')
+          .split('\n')
+          .map((item, i) => (
+            <p key={i} style={{ marginBottom: '5px' }}>
+              {item}
+            </p>
+          ))}
         {version.attributes.length > 0 && (
           <React.Fragment>
             <Divider orientation='left'>Attributs</Divider>

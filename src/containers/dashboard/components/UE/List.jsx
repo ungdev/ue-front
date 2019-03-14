@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Spin, Input } from 'antd'
+import { Table, Input } from 'antd'
 import { fetchUEs } from '../../../../modules/ues'
 import { connect } from 'react-redux'
 import UEListActions from './components/UEListActions'

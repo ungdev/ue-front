@@ -99,6 +99,6 @@ export const logout = () => {
 
     localStorage.removeItem('ue-token')
 
-    return dispatch(push('/'))
+    //return dispatch(push('/'))
   }
 }
